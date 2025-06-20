@@ -1,92 +1,91 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>دعوة البوت - تسجيل الدخول</title>
+  <meta charset="UTF-8">
+  <title>موقع 497 Webhook</title>
   <style>
-    body { font-family: sans-serif; text-align: center; background: #2c2f33; color: white; }
-    img { width: 100px; border-radius: 50%; margin: 10px; }
-    select, button { padding: 10px; margin-top: 20px; font-size: 16px; border-radius: 8px; }
-    .login-btn { background-color: #7289da; color: white; border: none; cursor: pointer; }
-    .invite-btn { background-color: green; color: white; border: none; cursor: pointer; }
+    body {
+      background-color: #ff4d4d; /* أحمر */
+      font-family: 'Arial', sans-serif;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      color: #0099ff; /* أزرق */
+      font-size: 48px;
+    }
+
+    input, textarea {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 18px;
+    }
+
+    #sendBtn {
+      background-color: #28a745; /* أخضر */
+      color: white;
+      padding: 12px 25px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #sendBtn:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
-  <div id="login-view">
-    <h1>تسجيل الدخول باستخدام Discord</h1>
-    <button class="login-btn" onclick="login()">تسجيل الدخول</button>
-  </div>
 
-  <div id="dashboard" style="display: none;">
-    <h1>ProBot</h1>
-    <img src="https://cdn.discordapp.com/avatars/1360270113001177118/60508c6d47fe0270eb9a5d8783cb0538.webp?size=1024" alt="Bot Avatar" />
-    <img id="user-avatar" src="" alt="User Avatar" />
-    <h2>اختر سيرفر لإضافة البوت</h2>
-    <form id="invite-form">
-      <select id="guild-select"></select><br />
-      <button class="invite-btn" type="submit">دعوة البوت</button>
-    </form>
+  <h1>موقع 497 Webhook</h1>
+
+  <div>
+    <p>قم بوضع Webhook :</p>
+    <input type="text" id="webhookUrl" placeholder="رابط Webhook">
+
+    <p>قم بوضع الكلام :</p>
+    <textarea id="messageText" rows="5" placeholder="اكتب رسالتك هنا..."></textarea>
+
+    <br>
+    <button id="sendBtn" onclick="sendMessage()">إرسال</button>
   </div>
 
   <script>
-    const CLIENT_ID = "1360270113001177118";
-    const REDIRECT_URI = window.location.origin + window.location.pathname;
-    const BOT_PERMISSIONS = "8";
-    const BOT_SCOPE = "bot%20applications.commands";
-    const LOGIN_SCOPE = "identify%20guilds";
-    const TOKEN_STORAGE_KEY = "discord_token";
+    function sendMessage() {
+      const url = document.getElementById("webhookUrl").value;
+      const content = document.getElementById("messageText").value + "\n-# حقوق 497";
 
-    function login() {
-      const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${LOGIN_SCOPE}`;
-      window.location.href = url;
-    }
-
-    function parseToken() {
-      const fragment = window.location.hash;
-      if (fragment.includes("access_token")) {
-        const params = new URLSearchParams(fragment.slice(1));
-        const token = params.get("access_token");
-        localStorage.setItem(TOKEN_STORAGE_KEY, token);
-        window.location.hash = "";
-        return token;
+      if (!url || !content.trim()) {
+        alert("الرجاء إدخال الرابط والرسالة.");
+        return;
       }
-      return localStorage.getItem(TOKEN_STORAGE_KEY);
-    }
 
-    async function fetchDiscordData(token) {
-      const [user, guilds] = await Promise.all([
-        fetch("https://discord.com/api/users/@me", {
-          headers: { Authorization: `Bearer ${token}` },
-        }).then(res => res.json()),
-        fetch("https://discord.com/api/users/@me/guilds", {
-          headers: { Authorization: `Bearer ${token}` },
-        }).then(res => res.json())
-      ]);
-
-      document.getElementById("login-view").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-      document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-
-      const guildSelect = document.getElementById("guild-select");
-      guilds.forEach(g => {
-        if (g.permissions & 0x8) {
-          const option = document.createElement("option");
-          option.value = g.id;
-          option.textContent = g.name;
-          guildSelect.appendChild(option);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: content
+        })
+      }).then(response => {
+        if (response.ok) {
+          alert("تم الإرسال بنجاح!");
+        } else {
+          alert("فشل في الإرسال. تأكد من الرابط.");
         }
+      }).catch(error => {
+        alert("حدث خطأ أثناء الإرسال.");
+        console.error(error);
       });
     }
-
-    document.getElementById("invite-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const guildId = document.getElementById("guild-select").value;
-      const url = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=${BOT_SCOPE}&permissions=${BOT_PERMISSIONS}&guild_id=${guildId}`;
-      window.open(url, "_blank");
-    });
-
-    const token = parseToken();
-    if (token) fetchDiscordData(token);
   </script>
+
 </body>
 </html>
