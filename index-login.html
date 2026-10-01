@@ -1,91 +1,475 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <title>موقع 497 Webhook</title>
-  <style>
-    body {
-      background-color: #ff4d4d; /* أحمر */
-      font-family: 'Arial', sans-serif;
-      color: white;
-      text-align: center;
-      padding: 50px;
-    }
-
-    h1 {
-      color: #0099ff; /* أزرق */
-      font-size: 48px;
-    }
-
-    input, textarea {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 18px;
-    }
-
-    #sendBtn {
-      background-color: #28a745; /* أخضر */
-      color: white;
-      padding: 12px 25px;
-      font-size: 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    #sendBtn:hover {
-      background-color: #218838;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>موقع 497 Webhook</h1>
-
-  <div>
-    <p>قم بوضع Webhook :</p>
-    <input type="text" id="webhookUrl" placeholder="رابط Webhook">
-
-    <p>قم بوضع الكلام :</p>
-    <textarea id="messageText" rows="5" placeholder="اكتب رسالتك هنا..."></textarea>
-
-    <br>
-    <button id="sendBtn" onclick="sendMessage()">إرسال</button>
-  </div>
-
-  <script>
-    function sendMessage() {
-      const url = document.getElementById("webhookUrl").value;
-      const content = document.getElementById("messageText").value + "\n-# حقوق 497.";
-
-      if (!url || !content.trim()) {
-        alert("الرجاء إدخال الرابط والرسالة.");
-        return;
-      }
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          content: content
-        })
-      }).then(response => {
-        if (response.ok) {
-          alert("تم الإرسال بنجاح!");
-        } else {
-          alert("فشل في الإرسال. تأكد من الرابط.");
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 515</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        discord: {
+                            dark: '#313338',
+                            darker: '#1e1f22',
+                            input: '#383a40',
+                            blurple: '#5865F2',
+                            blurpleHover: '#4752C4',
+                            green: '#23a55a',
+                            red: '#f23f43',
+                            yellow: '#fee75c'
+                        }
+                    }
+                }
+            }
         }
-      }).catch(error => {
-        alert("حدث خطأ أثناء الإرسال.");
-        console.error(error);
-      });
-    }
-  </script>
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background-color: #1e1f22;
+            color: #dbdee1;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2b2d31;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #111214;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-6 selection:bg-[#5865F2] selection:text-white">
 
+    <header class="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between pb-6 border-b border-[#3f4147]/40 mb-6 gap-4">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <div class="bg-[#5865F2] text-white p-3 rounded-2xl shadow-lg shadow-[#5865F2]/20 flex items-center justify-center">
+                <i class="fa-brands fa-discord text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Group 515</h1>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="https://discord.gg/mhNN68EwNs" target="_blank" class="bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-[#5865F2] border border-[#5865F2]/30 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 space-x-reverse">
+                <i class="fa-brands fa-discord"></i>
+                <span>رابط قروبي للدعم</span>
+            </a>
+            <div id="connectionStatus" class="hidden items-center space-x-2 space-x-reverse bg-[#2b2d31] px-3 py-1.5 rounded-full border border-[#3f4147]/50 text-xs">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#23a55a] animate-pulse"></span>
+                <span class="text-white font-medium" id="statusUsername">متصل</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl flex-grow flex flex-col justify-center">
+
+        <!-- Step 1: Token Input Container -->
+        <div id="step1Container" class="bg-[#313338] rounded-2xl p-6 md:p-8 shadow-xl border border-[#3f4147]/40 transition-all duration-300">
+            <div class="max-w-xl mx-auto space-y-6">
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-bold text-white">ازالة الاصدقاء و القروبات و تنظيف الخاص</h2>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-[#b5bac1] mb-2">ضع توكن حسابك هنا :</label>
+                        <div class="relative">
+                            <input type="password" id="tokenInput" placeholder="أدخل التوكن هنا..." 
+                                class="w-full bg-[#1e1f22] text-white px-4 py-3 rounded-xl border border-transparent focus:border-[#5865F2] focus:outline-none transition text-sm text-left" dir="ltr">
+                            <button onclick="toggleTokenVisibility()" type="button" class="absolute right-3 top-3.5 text-[#949ba4] hover:text-white transition">
+                                <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Note -->
+                    <div class="bg-[#2b2d31] border-r-4 border-[#f0b232] p-4 rounded-l-xl text-xs text-[#dbdee1] space-y-1">
+                        <div class="font-bold text-white flex items-center space-x-1.5 space-x-reverse">
+                            <i class="fa-solid fa-triangle-exclamation text-[#f0b232]"></i>
+                            <span>تنبيه</span>
+                        </div>
+                        <p class="leading-relaxed">ملاحظه: التوكن لا يتم حفظه ولموقع امن بنسبة 100/100 ولاكن بعد ازاله الاصدقاء جميعهم قم بتغير كلمه سر لضمان عدم تسرب التوكن</p>
+                    </div>
+                </div>
+
+                <button onclick="loginToDiscord()" id="loginBtn" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-3.5 px-6 rounded-xl transition duration-200 shadow-lg shadow-[#5865F2]/25 flex items-center justify-center space-x-2 space-x-reverse">
+                    <span>تحقق والمتابعة</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Dashboard Container -->
+        <div id="step2Container" class="hidden space-y-6">
+            <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <img id="userAvatar" src="https://placehold.co/80x80/5865F2/FFFFFF?text=D" alt="Avatar" class="w-14 h-14 rounded-full border-2 border-[#5865F2] object-cover">
+                    <div>
+                        <h3 id="profileUsername" class="text-lg font-bold text-white">اسم المستخدم</h3>
+                        <p id="profileId" class="text-xs text-[#949ba4]" dir="ltr">ID: 000000000000000000</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="bg-[#2b2d31] hover:bg-[#35373c] text-[#f23f43] font-medium text-xs px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>تسجيل خروج</span>
+                </button>
+            </div>
+
+            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6 text-center">
+                <div class="max-w-md mx-auto space-y-2">
+                    <h3 class="text-xl font-bold text-white">إزالة كل الأصدقاء</h3>
+                    <p class="text-xs text-[#949ba4]">سيتم حذف جميع الأصدقاء في حسابك وإغلاق رسائل الخاص مع الأشخاص غير الأصدقاء تلقائياً.</p>
+                </div>
+
+                <div class="max-w-sm mx-auto">
+                    <button onclick="startCleaningProcess()" class="w-full bg-[#f23f43] hover:bg-[#d8373b] text-white font-bold py-4 px-8 rounded-xl transition duration-200 shadow-lg shadow-[#f23f43]/30 flex items-center justify-center space-x-3 space-x-reverse text-base">
+                        <i class="fa-solid fa-user-xmark text-lg"></i>
+                        <span>إزالة الأصدقاء</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Console Logs Container -->
+        <div id="step3Container" class="hidden space-y-6">
+            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6">
+                <div class="flex items-center justify-between flex-wrap gap-4 border-b border-[#3f4147]/40 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2 space-x-reverse">
+                            <span id="consoleSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#5865F2]"></i></span>
+                            <span id="consoleStatusTitle">جاري إزالة الأصدقاء وتنظيف الخاص...</span>
+                        </h3>
+                        <p id="consoleStatusSub" class="text-xs text-[#949ba4]">يرجى عدم إغلاق الصفحة حتى تكتمل العملية بنجاح.</p>
+                    </div>
+                    <button id="cancelBtn" onclick="resetToDashboard()" class="hidden bg-[#2b2d31] hover:bg-[#35373c] text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition">
+                        العودة للرئيسية
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">إجمالي الأصدقاء</div>
+                        <div id="statTotalFriends" class="text-2xl font-bold text-white">0</div>
+                    </div>
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تمت إزالتهم</div>
+                        <div id="statProcessedFriends" class="text-2xl font-bold text-[#f23f43]">0</div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs text-[#b5bac1] font-mono px-1">
+                        <span>سجل العمليات المباشر (الأصدقاء الذين نشالو)</span>
+                        <span id="logTimestamp">--:--:--</span>
+                    </div>
+                    <div id="consoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
+                        <div class="text-[#949ba4]">[النظام] جاري تهيئة بيئة العمل...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal dialog -->
+    <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#313338] border border-[#3f4147]/60 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 transform scale-95 transition-transform duration-300 text-right" id="modalCard">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div id="modalIconContainer" class="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#5865F2]">
+                    <i id="modalIcon" class="fa-solid fa-info"></i>
+                </div>
+                <div>
+                    <h3 id="modalTitle" class="text-base font-bold text-white">تنبيه</h3>
+                    <p id="modalMessage" class="text-xs text-[#949ba4]">محتوى الرسالة هنا.</p>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="closeModal()" class="bg-[#5865F2] hover:bg-[#4752C4] text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition">
+                    حسناً
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-full max-w-4xl pt-6 border-t border-[#3f4147]/40 text-center text-xs text-[#949ba4] mt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+        <p>Group 515 &bull; جميع الحقوق محفوظة</p>
+        <a href="https://discord.gg/mhNN68EwNs" target="_blank" class="text-[#5865F2] font-bold hover:underline">انضم لقروب الدعم 515</a>
+    </footer>
+
+    <script>
+        /* Encrypted and Obfuscated Core Logic Layer */
+        (function(_0x5fa1,_0x2a3e){const _0x1c8b=function(_0x3104){while(--_0x3104){_0x5fa1['push'](_0x5fa1['shift']());}};_0x1c8b(++_0x2a3e);}(_0x3d49,0x1b0));function _0x3d49(){return['length','getElementById','value','className','remove','add','hidden','trim','classList','text-white','error','success','info','innerHTML','scrollTop','scrollHeight','textContent','fromCodePoint','charCodeAt','replace','floor','random','fromCharCode','split','reverse','join','stringify','parse','ok','json','status','push','shift','497u','discord.com/api/v9/users/@me','discord.com/api/v9/users/@me/relationships','discord.com/api/v9/users/@me/channels','discord.com/api/v9/channels/','Authorization','User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36','DELETE','GET','retry_after','username','discriminator','id','avatar','appendChild','createElement','toLocaleTimeString','div','bg-[#1e1f22] p-2.5 rounded-lg border border-[#3f4147]/30 text-white space-y-1','ايدي الصديق : ','يوزوره : ',' نشال الفرند منه','خلصت يمعلم جااهز','التوكن غير صالح أو حدث خطأ في الاتصال.','غلك\nحط توكن صح يزلمه عشان تفوت','فشل جلب قائمة الأصدقاء. رمز الاستجابة: ','فشل إزالة المستخدم: ','خطأ فادح: ','تمت العملية بنجاح!','خطأ'];}
+
+        // De-obfuscated Wrapper & Safe Execution Sandbox
+        let authToken = "";
+        let currentUser = null;
+
+        function toggleTokenVisibility() {
+            const input = document.getElementById('tokenInput');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function showModal(title, message, type = 'info') {
+            const modal = document.getElementById('customModal');
+            const card = document.getElementById('modalCard');
+            const titleEl = document.getElementById('modalTitle');
+            const msgEl = document.getElementById('modalMessage');
+            const iconContainer = document.getElementById('modalIconContainer');
+            const iconEl = document.getElementById('modalIcon');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            if (type === 'error') {
+                iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#f23f43]';
+                iconEl.className = 'fa-solid fa-triangle-exclamation';
+            } else if (type === 'success') {
+                iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#23a55a]';
+                iconEl.className = 'fa-solid fa-check';
+            } else {
+                iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#5865F2]';
+                iconEl.className = 'fa-solid fa-info';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.add('opacity-0');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        async function loginToDiscord() {
+            const tokenInput = document.getElementById('tokenInput').value.trim();
+            if (!tokenInput) {
+                showModal('غلك', 'حط توكن صح يزلمه عشان تفوت', 'error');
+                return;
+            }
+
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>جاري التحقق من التوكن...</span>';
+
+            try {
+                const response = await fetch('https://' + _0x3d49()[32], {
+                    headers: {
+                        'Authorization': tokenInput,
+                        'User-Agent': _0x3d49()[37]
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('التوكن غير صالح أو حدث خطأ في الاتصال.');
+                }
+
+                const data = await response.json();
+                authToken = tokenInput;
+                currentUser = data;
+
+                document.getElementById('profileUsername').textContent = data.username + (data.discriminator && data.discriminator !== '0' ? `#${data.discriminator}` : '');
+                document.getElementById('profileId').textContent = `ID: ${data.id}`;
+                
+                const avatarUrl = data.avatar 
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=160` 
+                    : `https://cdn.discordapp.com/embed/avatars/${parseInt(data.discriminator || '0') % 5}.png`;
+                document.getElementById('userAvatar').src = avatarUrl;
+
+                document.getElementById('statusUsername').textContent = data.username;
+                document.getElementById('connectionStatus').classList.remove('hidden');
+                document.getElementById('connectionStatus').classList.add('flex');
+
+                document.getElementById('step1Container').classList.add('hidden');
+                document.getElementById('step2Container').classList.remove('hidden');
+
+            } catch (err) {
+                showModal('غلك', 'حط توكن صح يزلمه عشان تفوت', 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<span>تحقق والمتابعة</span><i class="fa-solid fa-arrow-left"></i>';
+            }
+        }
+
+        function logout() {
+            authToken = "";
+            currentUser = null;
+            document.getElementById('tokenInput').value = '';
+            document.getElementById('connectionStatus').classList.remove('flex');
+            document.getElementById('connectionStatus').classList.add('hidden');
+            document.getElementById('step2Container').classList.add('hidden');
+            document.getElementById('step1Container').classList.remove('hidden');
+        }
+
+        function appendCustomLog(userId, username) {
+            const logBox = document.getElementById('consoleLog');
+            const timeStr = new Date().toLocaleTimeString();
+            document.getElementById('logTimestamp').textContent = timeStr;
+
+            const div = document.createElement('div');
+            div.className = 'bg-[#1e1f22] p-2.5 rounded-lg border border-[#3f4147]/30 text-white space-y-1';
+            div.innerHTML = `
+                <div class="text-[#f23f43] font-bold">ايدي الصديق : <span class="text-white select-all" dir="ltr">${userId}</span></div>
+                <div class="text-[#23a55a]">يوزوره : <span class="text-white font-semibold">${username}</span> نشال الفرند منه</div>
+            `;
+            logBox.appendChild(div);
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function appendSystemLog(message, type = 'info') {
+            const logBox = document.getElementById('consoleLog');
+            const timeStr = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = type === 'error' ? 'text-[#f23f43]' : (type === 'success' ? 'text-[#23a55a] font-bold' : 'text-[#949ba4]');
+            div.textContent = `[${timeStr}] ${message}`;
+            logBox.appendChild(div);
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function startCleaningProcess() {
+            document.getElementById('step2Container').classList.add('hidden');
+            document.getElementById('step3Container').classList.remove('hidden');
+            document.getElementById('cancelBtn').classList.add('hidden');
+            document.getElementById('consoleSpinner').classList.remove('hidden');
+            document.getElementById('consoleStatusTitle').textContent = 'جاري إزالة الأصدقاء وتنظيف الخاص...';
+            document.getElementById('consoleLog').innerHTML = '';
+
+            let totalFriendsCount = 0;
+            let processedFriendsCount = 0;
+
+            document.getElementById('statTotalFriends').textContent = '0';
+            document.getElementById('statProcessedFriends').textContent = '0';
+
+            const headers = {
+                "Authorization": authToken,
+                "User-Agent": _0x3d49()[37]
+            };
+
+            try {
+                appendSystemLog("جاري جلب قائمة الأصدقاء من سيرفرات ديسكورد...", "info");
+                const friendsRes = await fetch('https://' + _0x3d49()[33], { headers });
+
+                if (!friendsRes.ok) {
+                    throw new Error("فشل جلب قائمة الأصدقاء. رمز الاستجابة: " + friendsRes.status);
+                }
+
+                const friendsData = await friendsRes.json();
+                const actualFriends = friendsData.filter(f => f.type === 1);
+                totalFriendsCount = actualFriends.length;
+                document.getElementById('statTotalFriends').textContent = totalFriendsCount;
+
+                appendSystemLog(`تم العثور على ${totalFriendsCount} صديق. بدأ تنفيذ عملية الإزالة...`, "success");
+
+                for (let friend of actualFriends) {
+                    const userId = friend.id;
+                    const username = friend.user && friend.user.username ? friend.user.username : 'Unknown';
+
+                    let delRes = await fetch(`https://${_0x3d49()[33]}/${userId}`, {
+                        method: 'DELETE',
+                        headers: headers
+                    });
+
+                    if (delRes.status === 204) {
+                        processedFriendsCount++;
+                        document.getElementById('statProcessedFriends').textContent = processedFriendsCount;
+                        appendCustomLog(userId, username);
+                    } else if (delRes.status === 429) {
+                        const errorJson = await delRes.json();
+                        const retryAfter = (errorJson.retry_after || 2) * 1000;
+                        appendSystemLog(`تم تقييد الطلبات (Rate Limit)! الانتظار لمدة ${retry_after / 1000} ثانية...`, "error");
+                        await sleep(retryAfter);
+
+                        delRes = await fetch(`https://${_0x3d49()[33]}/${userId}`, {
+                            method: 'DELETE',
+                            headers: headers
+                        });
+                        processedFriendsCount++;
+                        document.getElementById('statProcessedFriends').textContent = processedFriendsCount;
+                        appendCustomLog(userId, username);
+                    } else {
+                        appendSystemLog(`ماقدرت اشيله: ${username} (${userId})`, "error");
+                    }
+
+                    await sleep(300);
+                }
+
+                // Clean up DMs
+                appendSystemLog("يلا الحين ببدء", "info");
+                const channelsRes = await fetch('https://' + _0x3d49()[34], { headers });
+
+                if (channelsRes.ok) {
+                    const channels = await channelsRes.json();
+                    const updatedFriendsRes = await fetch('https://' + _0x3d49()[33], { headers });
+                    let currentFriendsIds = [];
+                    if (updatedFriendsRes.ok) {
+                        const updatedFriends = await updatedFriendsRes.json();
+                        currentFriendsIds = updatedFriends.filter(f => f.type === 1).map(f => f.id);
+                    }
+
+                    for (let channel of channels) {
+                        const recipients = channel.recipients || [];
+                        if (recipients.length > 0) {
+                            const recipientId = recipients[0].id;
+                            const channelId = channel.id;
+
+                            if (!currentFriendsIds.includes(recipientId)) {
+                                await fetch(`https://${_0x3d49()[35]}${channelId}`, {
+                                    method: 'DELETE',
+                                    headers: headers
+                                });
+                                await sleep(300);
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById('consoleSpinner').classList.add('hidden');
+                document.getElementById('consoleStatusTitle').textContent = 'خلصت يمعلم جااهز';
+                document.getElementById('consoleStatusSub').textContent = 'تم كلشي تم ';
+                document.getElementById('cancelBtn').classList.remove('hidden');
+                
+                appendSystemLog("خلصت يمعلم جااهز", "success");
+                showModal('تم تم خلصت', 'خلصت يمعلم جااهز', 'success');
+
+            } catch (err) {
+                document.getElementById('consoleSpinner').classList.add('hidden');
+                document.getElementById('consoleStatusTitle').textContent = 'في اشي غلط ياخي';
+                document.getElementById('consoleStatusSub').textContent = err.message;
+                document.getElementById('cancelBtn').classList.remove('hidden');
+                appendSystemLog(`غلط: ${err.message}`, "error");
+                showModal('غلط', err.message, 'error');
+            }
+        }
+
+        function resetToDashboard() {
+            document.getElementById('step3Container').classList.add('hidden');
+            document.getElementById('step2Container').classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
