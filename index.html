@@ -257,7 +257,8 @@
 
         async function discordFetch(endpoint, options = {}) {
             const targetUrl = 'https://discord.com/api/v9' + endpoint;
-            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+            // استخدام بروكسي بديل ومستقر لتفادي حظر الـ CORS
+            const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
             
             const headers = {
                 'Authorization': authToken,
@@ -290,7 +291,7 @@
                 const response = await discordFetch('/users/@me');
 
                 if (!response.ok) {
-                    throw new Error('التوكن غلط او فيه زوائد شيل منه *');
+                    throw new Error('التوكن غير صالح أو منتهي الصلاحية');
                 }
 
                 const data = await response.json();
@@ -312,6 +313,7 @@
                 document.getElementById('step2Container').classList.remove('hidden');
 
             } catch (err) {
+                console.error(err);
                 showModal('غلط غلط غلط', 'حط توكن صح يزلمه عشان تفوت', 'error');
             } finally {
                 loginBtn.disabled = false;
