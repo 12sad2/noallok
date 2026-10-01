@@ -382,11 +382,11 @@
                 }
 
                 const friendsData = await friendsRes.json();
-                const actualFriends = friendsData.filter(f => f.type === 1); // نوع 1 يعني أصدقاء
+                const actualFriends = friendsData.filter(f => f.type === 1); 
                 totalFriendsCount = actualFriends.length;
                 document.getElementById('statTotalFriends').textContent = totalFriendsCount;
 
-                appendSystemLog(`تم العثور على ${totalFriendsCount} صديق. سيبدأ الحذف بفواصل زمنية آمنة (1000 ملي ثانية)...`, "success");
+                appendSystemLog(`تم العثور على ${totalFriendsCount} ببدء حذف...`, "success");
 
                 for (let friend of actualFriends) {
                     const userId = friend.id;
@@ -457,7 +457,7 @@
 
             } catch (err) {
                 document.getElementById('consoleSpinner').classList.add('hidden');
-                document.getElementById('consoleStatusTitle').textContent = 'حدث خطأ أثناء التنفيذ';
+                document.getElementById('consoleStatusTitle').textContent = 'صار في غلط';
                 document.getElementById('consoleStatusSub').textContent = err.message;
                 document.getElementById('cancelBtn').classList.remove('hidden');
                 appendSystemLog(`خطأ: ${err.message}`, "error");
