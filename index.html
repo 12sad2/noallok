@@ -77,7 +77,7 @@
             <div class="max-w-xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-white">ازالة الاصدقاء والقروبات وتنظيف الخاص</h2>
-                    <p class="text-xs text-[#949ba4]">أدخل توكن حسابك للبدء بعملية التنظيف الآمنة</p>
+                    <p class="text-xs text-[#949ba4]">أدخل توكن حسابك للبدء </p>
                 </div>
 
                 <div class="space-y-3">
@@ -168,7 +168,7 @@
 
                 <div class="space-y-2">
                     <div class="flex items-center justify-between text-xs text-[#b5bac1] font-mono px-1">
-                        <span>سجل العمليات المباشر</span>
+                        <span>لوق الحذف</span>
                         <span id="logTimestamp">--:--:--</span>
                     </div>
                     <div id="consoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
@@ -280,20 +280,20 @@
         async function loginToDiscord() {
             const tokenInput = document.getElementById('tokenInput').value.trim();
             if (!tokenInput) {
-                showModal('خطأ', 'الرجاء إدخال التوكن بشكل صحيح', 'error');
+                showModal('غلط', 'ياريت تكتب التوكن بشكل صحيح', 'error');
                 return;
             }
 
             const loginBtn = document.getElementById('loginBtn');
             loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>جاري التحقق من التوكن...</span>';
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>بتحقق من التوكن اصبر</span>';
 
             try {
                 authToken = tokenInput;
                 const response = await discordFetch('/users/@me');
 
                 if (!response.ok) {
-                    throw new Error('التوكن غير صالح أو منتهي الصلاحية، تأكد من نسخه بدون رموز إضافية.');
+                    throw new Error('التوكن غير صالح أو منتهي الصلاحية، تأكد من توكن بدون رموز زيادة');
                 }
 
                 const data = await response.json();
