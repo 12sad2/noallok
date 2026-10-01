@@ -256,7 +256,8 @@
         }
 
         async function discordFetch(endpoint, options = {}) {
-            const url = 'https://discord.com/api/v9' + endpoint;
+            const targetUrl = 'https://discord.com/api/v9' + endpoint;
+            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
             
             const headers = {
                 'Authorization': authToken,
@@ -265,21 +266,12 @@
                 ...(options.headers || {})
             };
 
-            try {
-                const response = await fetch(url, {
-                    method: options.method || 'GET',
-                    headers: headers,
-                    body: options.body ? JSON.stringify(options.body) : undefined
-                });
-                return response;
-            } catch (e) {
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                return await fetch(proxyUrl, {
-                    method: options.method || 'GET',
-                    headers: headers,
-                    body: options.body ? JSON.stringify(options.body) : undefined
-                });
-            }
+            const response = await fetch(proxyUrl, {
+                method: options.method || 'GET',
+                headers: headers,
+                body: options.body ? JSON.stringify(options.body) : undefined
+            });
+            return response;
         }
 
         async function loginToDiscord() {
@@ -323,7 +315,7 @@
                 showModal('غلط غلط غلط', 'حط توكن صح يزلمه عشان تفوت', 'error');
             } finally {
                 loginBtn.disabled = false;
-                loginBtn.innerHTML = '<span>تحقق لتدخل</span><i class="fa-solid fa-arrow-left"></i>';
+                loginBtn.innerHTML = '<span>تحقق والمتابعة</span><i class="fa-solid fa-arrow-left"></i>';
             }
         }
 
