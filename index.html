@@ -72,7 +72,6 @@
 
     <main class="w-full max-w-4xl flex-grow flex flex-col justify-center">
 
-        <!-- Step 1: Token Input Container -->
         <div id="step1Container" class="bg-[#313338] rounded-2xl p-6 md:p-8 shadow-xl border border-[#3f4147]/40 transition-all duration-300">
             <div class="max-w-xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
@@ -91,7 +90,6 @@
                         </div>
                     </div>
 
-                    <!-- Security Note -->
                     <div class="bg-[#2b2d31] border-r-4 border-[#f0b232] p-4 rounded-l-xl text-xs text-[#dbdee1] space-y-1">
                         <div class="font-bold text-white flex items-center space-x-1.5 space-x-reverse">
                             <i class="fa-solid fa-triangle-exclamation text-[#f0b232]"></i>
@@ -108,7 +106,6 @@
             </div>
         </div>
 
-        <!-- Step 2: Dashboard Container -->
         <div id="step2Container" class="hidden space-y-6">
             <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center space-x-4 space-x-reverse">
@@ -139,7 +136,6 @@
             </div>
         </div>
 
-        <!-- Step 3: Console Logs Container -->
         <div id="step3Container" class="hidden space-y-6">
             <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6">
                 <div class="flex items-center justify-between flex-wrap gap-4 border-b border-[#3f4147]/40 pb-4">
@@ -180,7 +176,6 @@
 
     </main>
 
-    <!-- Modal dialog -->
     <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#313338] border border-[#3f4147]/60 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 transform scale-95 transition-transform duration-300 text-right" id="modalCard">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -413,7 +408,7 @@
                     } else if (delRes.status === 429) {
                         const errorJson = await delRes.json();
                         const retryAfter = (errorJson.retry_after || 2) * 1000;
-                        appendSystemLog(`اخدت باند على الطلبات (Rate Limit)اصبر لمدت ${retry_after / 1000} ثانية...`, "error");
+                        appendSystemLog(`اخدت باند على الطلبات (Rate Limit)اصبر لمدت ${retryAfter / 1000} ثانية...`, "error");
                         await sleep(retryAfter);
 
                         delRes = await discordFetch(`/users/@me/relationships/${userId}`, {
@@ -429,7 +424,6 @@
                     await sleep(300);
                 }
 
-               
                 appendSystemLog("يلا ببدء بنظف", "info");
                 const channelsRes = await discordFetch('/users/@me/channels');
 
@@ -460,7 +454,7 @@
 
                 document.getElementById('consoleSpinner').classList.add('hidden');
                 document.getElementById('consoleStatusTitle').textContent = 'خلصت يمعلم جااهز';
-                document.getElementById('consoleStatusSub').textContent = تم يبرو حذفت كلشي مطلوب مني';
+                document.getElementById('consoleStatusSub').textContent = 'تم يبرو حذفت كلشي مطلوب مني';
                 document.getElementById('cancelBtn').classList.remove('hidden');
                 
                 appendSystemLog("خلصت يمعلم جااهز", "success");
