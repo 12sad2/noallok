@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group 515 - تنظيف ديسكورد الشامل</title>
+    <title>Group 515 - </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -127,7 +127,7 @@
             <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6 text-center">
                 <div class="max-w-md mx-auto space-y-2">
                     <h3 class="text-xl font-bold text-white">إزالة الأصدقاء وتنظيف الخاص</h3>
-                    <p class="text-xs text-[#949ba4]">سيتم حذف الأصدقاء، الخروج من القروبات، وتنظيف المحادثات الخاصة بفواصل زمنية آمنة لحمايتك من الباند.</p>
+                    <p class="text-xs text-[#949ba4]">سيتم حذف الأصدقاء،.</p>
                 </div>
 
                 <div class="max-w-sm mx-auto">
@@ -146,7 +146,7 @@
                     <div>
                         <h3 class="text-lg font-bold text-white flex items-center space-x-2 space-x-reverse">
                             <span id="consoleSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#5865F2]"></i></span>
-                            <span id="consoleStatusTitle">جاري تنفيذ عملية الحذف بأمان...</span>
+                            <span id="consoleStatusTitle">ببدء تنفيذ عملية الحذف </span>
                         </h3>
                         <p id="consoleStatusSub" class="text-xs text-[#949ba4]">يرجى عدم إغلاق الموقع حتى تنتهي العملية بالكامل.</p>
                     </div>
@@ -260,7 +260,6 @@
             }, 300);
         }
 
-        // دالة الاتصال المباشر بـ ديسكورد API بدون بروكسي لتفادي حظر Cloudflare
         async function discordFetch(endpoint, options = {}) {
             const targetUrl = 'https://discord.com/api/v9' + endpoint;
             
@@ -365,7 +364,7 @@
             document.getElementById('step3Container').classList.remove('hidden');
             document.getElementById('cancelBtn').classList.add('hidden');
             document.getElementById('consoleSpinner').classList.remove('hidden');
-            document.getElementById('consoleStatusTitle').textContent = 'جاري عملية الحذف الآمن...';
+            document.getElementById('consoleStatusTitle').textContent = 'ببدء';
             document.getElementById('consoleLog').innerHTML = '';
 
             let totalFriendsCount = 0;
@@ -375,7 +374,7 @@
             document.getElementById('statProcessedFriends').textContent = '0';
 
             try {
-                appendSystemLog("جاري جلب قائمة الأصدقاء...", "info");
+                appendSystemLog("بشوف اصدقائك", "info");
                 const friendsRes = await discordFetch('/users/@me/relationships');
 
                 if (!friendsRes.ok) {
@@ -402,13 +401,11 @@
                         document.getElementById('statProcessedFriends').textContent = processedFriendsCount;
                         appendCustomLog(userId, username);
                     } else if (delRes.status === 429) {
-                        // حماية ضد ضغط الطلبات Rate Limit
                         const errorJson = await delRes.json();
                         const retryAfter = (errorJson.retry_after || 5) * 1000;
                         appendSystemLog(`تم بلوغ الحد المسموح (Rate Limit)، الانتظار لمدة ${retryAfter / 1000} ثانية لتجنب الحظر...`, "error");
                         await sleep(retryAfter);
 
-                        // إعادة المحاولة بعد انتهاء مدة الحظر المؤقت
                         delRes = await discordFetch(`/users/@me/relationships/${userId}`, {
                             method: 'DELETE'
                         });
@@ -419,7 +416,6 @@
                         appendSystemLog(`تعذر حذف المستخدم: ${username} (${userId})`, "error");
                     }
 
-                    // **وقت العملية الآمن**: تأخير متعمد بين كل عملية حذف والأخرى (1000 ملي ثانية = ثانية كاملة) لمنع باند الحساب
                     await sleep(1000);
                 }
 
@@ -441,12 +437,11 @@
                             const recipientId = recipients[0].id;
                             const channelId = channel.id;
 
-                            // إغلاق المحادثة الخاصة إذا لم يكن الشخص صديقاً حالياً
                             if (!currentFriendsIds.includes(recipientId)) {
                                 await discordFetch(`/channels/${channelId}`, {
                                     method: 'DELETE'
                                 });
-                                await sleep(800); // وقت آمن بين إغلاق الرومات الخاصة
+                                await sleep(800); 
                             }
                         }
                     }
@@ -454,10 +449,10 @@
 
                 document.getElementById('consoleSpinner').classList.add('hidden');
                 document.getElementById('consoleStatusTitle').textContent = 'تمت العملية بنجاح!';
-                document.getElementById('consoleStatusSub').textContent = 'تم تنظيف الأصدقاء والخاص بنجاح تامة وآمنة.';
+                document.getElementById('consoleStatusSub').textContent = 'تم تنظيف الأصدقاء والخاص بنجاح.';
                 document.getElementById('cancelBtn').classList.remove('hidden');
                 
-                appendSystemLog("اكتملت جميع العمليات بنجاح تام!", "success");
+                appendSystemLog("تم تم", "success");
                 showModal('تم بنجاح', 'تم إزالة الأصدقاء وتنظيف الخاص بنجاح تام.', 'success');
 
             } catch (err) {
