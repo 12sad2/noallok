@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group 515 - </title>
+    <title>Group 515 - تنظيف حساب ديسكورد</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,16 +34,35 @@
             background-color: #1e1f22;
             color: #dbdee1;
         }
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #2b2d31; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #111214; border-radius: 4px; }
+        .feature-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        ::-webkit-scrollbar-track {
-            background: #2b2d31;
-            border-radius: 4px;
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(88,101,242,0.5);
+            box-shadow: 0 8px 30px rgba(88,101,242,0.15);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #111214;
-            border-radius: 4px;
+        .progress-bar {
+            background: linear-gradient(90deg, #5865F2, #4752C4);
+            transition: width 0.5s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-red {
+            animation: pulseRed 2s infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(242,63,67,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(242,63,67,0); }
         }
     </style>
 </head>
@@ -72,35 +91,31 @@
 
     <main class="w-full max-w-4xl flex-grow flex flex-col justify-center">
 
-        <!-- الخطوة 1: تسجيل الدخول بالتوكن -->
-        <div id="step1Container" class="bg-[#313338] rounded-2xl p-6 md:p-8 shadow-xl border border-[#3f4147]/40 transition-all duration-300">
+        <div id="step1Container" class="fade-in bg-[#313338] rounded-2xl p-6 md:p-8 shadow-xl border border-[#3f4147]/40 transition-all duration-300">
             <div class="max-w-xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
-                    <h2 class="text-2xl font-bold text-white">ازالة الاصدقاء والقروبات وتنظيف الخاص</h2>
-                    <p class="text-xs text-[#949ba4]">أدخل توكن حسابك للبدء </p>
+                    <h2 class="text-2xl font-bold text-white">أدخل توكن حسابك للبدء</h2>
+                    <p class="text-xs text-[#949ba4]">تأكد إن التوكن بدون علامة *</p>
                 </div>
-
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-[#b5bac1] mb-2">اكتب توكنك هنا تأكد بدون * :</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-[#b5bac1] mb-2">التوكن</label>
                         <div class="relative">
-                            <input type="password" id="tokenInput" placeholder="اكتب توكنك هنا تأكد بدون *" 
+                            <input type="password" id="tokenInput" placeholder="MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GabcDe.fGhIjKlMnOpQrStUvWxYz"
                                 class="w-full bg-[#1e1f22] text-white px-4 py-3 rounded-xl border border-transparent focus:border-[#5865F2] focus:outline-none transition text-sm text-left" dir="ltr">
                             <button onclick="toggleTokenVisibility()" type="button" class="absolute right-3 top-3.5 text-[#949ba4] hover:text-white transition">
                                 <i id="eyeIcon" class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                     </div>
-
                     <div class="bg-[#2b2d31] border-r-4 border-[#f0b232] p-4 rounded-l-xl text-xs text-[#dbdee1] space-y-1">
                         <div class="font-bold text-white flex items-center space-x-1.5 space-x-reverse">
                             <i class="fa-solid fa-triangle-exclamation text-[#f0b232]"></i>
                             <span>تنبيه أمني</span>
                         </div>
-                        <p class="leading-relaxed">ملاحظة: التوكن لا يتم حفظه والموقع آمن 100%. لكن بعد إزالة الأصدقاء ونظافة الحساب، ننصحك بشدة بتغيير كلمة المرور لحماية حسابك من أي تسريب.</p>
+                        <p class="leading-relaxed">التوكن لا يتم حفظه والموقع آمن 100%. بعد التنظيف ننصحك بتغيير كلمة المرور.</p>
                     </div>
                 </div>
-
                 <button onclick="loginToDiscord()" id="loginBtn" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-3.5 px-6 rounded-xl transition duration-200 shadow-lg shadow-[#5865F2]/25 flex items-center justify-center space-x-2 space-x-reverse">
                     <span>تحقق والمتابعة</span>
                     <i class="fa-solid fa-arrow-left"></i>
@@ -108,8 +123,7 @@
             </div>
         </div>
 
-        <!-- الخطوة 2: لوحة التحكم بعد تسجيل الدخول -->
-        <div id="step2Container" class="hidden space-y-6">
+        <div id="step2Container" class="hidden fade-in space-y-6">
             <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center space-x-4 space-x-reverse">
                     <img id="userAvatar" src="https://placehold.co/80x80/5865F2/FFFFFF?text=D" alt="Avatar" class="w-14 h-14 rounded-full border-2 border-[#5865F2] object-cover">
@@ -123,55 +137,274 @@
                     <span>تسجيل خروج</span>
                 </button>
             </div>
-
-            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6 text-center">
-                <div class="max-w-md mx-auto space-y-2">
-                    <h3 class="text-xl font-bold text-white">إزالة الأصدقاء وتنظيف الخاص</h3>
-                    <p class="text-xs text-[#949ba4]">سيتم حذف الأصدقاء،.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div onclick="showFeaturePage('dm')" class="feature-card bg-[#313338] rounded-2xl p-6 border border-[#3f4147]/40 space-y-4 text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-[#5865F2]/15 flex items-center justify-center mx-auto">
+                        <i class="fa-solid fa-broom text-[#5865F2] text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">حذف كلامك من الخاص</h3>
+                    <p class="text-xs text-[#949ba4] leading-relaxed">حذف جميع رسائلك من محادثات الخاص</p>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center space-x-1.5 space-x-reverse text-[#5865F2] text-xs font-bold">
+                            <span>فتح</span>
+                            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                        </span>
+                    </div>
                 </div>
-
-                <div class="max-w-sm mx-auto">
-                    <button onclick="startCleaningProcess()" class="w-full bg-[#f23f43] hover:bg-[#d8373b] text-white font-bold py-4 px-8 rounded-xl transition duration-200 shadow-lg shadow-[#f23f43]/30 flex items-center justify-center space-x-3 space-x-reverse text-base">
-                        <i class="fa-solid fa-user-xmark text-lg"></i>
-                        <span>بدء عملية التنظيف الآمنة</span>
-                    </button>
+                <div onclick="showFeaturePage('friends')" class="feature-card bg-[#313338] rounded-2xl p-6 border border-[#3f4147]/40 space-y-4 text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-[#f23f43]/15 flex items-center justify-center mx-auto">
+                        <i class="fa-solid fa-user-xmark text-[#f23f43] text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">إزالة كل الفرندات والقروبات</h3>
+                    <p class="text-xs text-[#949ba4] leading-relaxed">حذف جميع الأصدقاء والخروج من كل السيرفرات</p>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center space-x-1.5 space-x-reverse text-[#f23f43] text-xs font-bold">
+                            <span>فتح</span>
+                            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+                <div onclick="showFeaturePage('server')" class="feature-card bg-[#313338] rounded-2xl p-6 border border-[#3f4147]/40 space-y-4 text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-[#23a55a]/15 flex items-center justify-center mx-auto">
+                        <i class="fa-solid fa-server text-[#23a55a] text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">حذف كلامك من كل سيرفرات</h3>
+                    <p class="text-xs text-[#949ba4] leading-relaxed">حذف جميع رسائلك من كل السيرفرات</p>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center space-x-1.5 space-x-reverse text-[#23a55a] text-xs font-bold">
+                            <span>فتح</span>
+                            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- الخطوة 3: شاشة الـ Console والتقدم -->
-        <div id="step3Container" class="hidden space-y-6">
-            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-6">
+        <div id="dmCleanContainer" class="hidden fade-in space-y-6">
+            <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <img id="dmUserAvatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#5865F2] object-cover">
+                    <div>
+                        <h3 id="dmProfileUsername" class="text-base font-bold text-white"></h3>
+                        <p id="dmProfileId" class="text-xs text-[#949ba4]" dir="ltr"></p>
+                    </div>
+                </div>
+                <button onclick="goBackToDashboard()" class="bg-[#2b2d31] hover:bg-[#35373c] text-white font-medium text-xs px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>رجوع</span>
+                </button>
+            </div>
+            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 rounded-2xl bg-[#5865F2]/15 flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-broom text-[#5865F2] text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">حذف كلامك من الخاص</h3>
+                    <p class="text-xs text-[#949ba4]">سيتم حذف جميع رسائلك من كل محادثات الخاص</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#b5bac1] mb-2 flex items-center space-x-1.5 space-x-reverse">
+                        <i class="fa-solid fa-shield-halved text-[#23a55a]"></i>
+                        <span>أيديات الأشخاص اللي ما تبي تحذف كلامك بخاصهم (افصل بفاصلة)</span>
+                    </label>
+                    <input type="text" id="dmExcludeIds" placeholder="8278829598589,8327543598"
+                        class="w-full bg-[#1e1f22] text-white px-4 py-3 rounded-xl border border-transparent focus:border-[#5865F2] focus:outline-none transition text-sm text-left font-mono" dir="ltr">
+                </div>
+                <div class="bg-[#f23f43]/10 border border-[#f23f43]/30 rounded-xl p-4 text-center space-y-1">
+                    <div class="flex items-center justify-center space-x-2 space-x-reverse text-[#f23f43] font-bold text-sm">
+                        <i class="fa-solid fa-skull-crossbones"></i>
+                        <span>تحذير</span>
+                    </div>
+                    <p class="text-[#f23f43]/90 text-xs font-semibold">سيتم حذف كل كلامك!</p>
+                </div>
+                <button onclick="startDmCleaning()" id="dmStartBtn" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-4 px-8 rounded-xl transition duration-200 shadow-lg shadow-[#5865F2]/25 flex items-center justify-center space-x-3 space-x-reverse text-base">
+                    <i class="fa-solid fa-broom text-lg"></i>
+                    <span>تنظيف الخاص</span>
+                </button>
+            </div>
+            <div id="dmConsoleWrapper" class="hidden bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
                 <div class="flex items-center justify-between flex-wrap gap-4 border-b border-[#3f4147]/40 pb-4">
                     <div>
-                        <h3 class="text-lg font-bold text-white flex items-center space-x-2 space-x-reverse">
-                            <span id="consoleSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#5865F2]"></i></span>
-                            <span id="consoleStatusTitle">ببدء تنفيذ عملية الحذف </span>
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2 space-x-reverse">
+                            <span id="dmSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#5865F2]"></i></span>
+                            <span id="dmStatusTitle">جاري التنظيف...</span>
                         </h3>
-                        <p id="consoleStatusSub" class="text-xs text-[#949ba4]">يرجى عدم إغلاق الموقع حتى تنتهي العملية بالكامل.</p>
+                        <p id="dmStatusSub" class="text-xs text-[#949ba4]">لا تغلق الموقع حتى تنتهي العملية</p>
                     </div>
-                    <button id="cancelBtn" onclick="resetToDashboard()" class="hidden bg-[#2b2d31] hover:bg-[#35373c] text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition">
-                        العودة للرئيسية
-                    </button>
+                    <button id="dmBackBtn" onclick="goBackToDashboard()" class="hidden bg-[#2b2d31] hover:bg-[#35373c] text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition">الرجوع</button>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
-                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">إجمالي الأصدقاء</div>
-                        <div id="statTotalFriends" class="text-2xl font-bold text-white">0</div>
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">إجمالي الرسائل</div>
+                        <div id="dmStatTotal" class="text-2xl font-bold text-white">0</div>
                     </div>
                     <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
-                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تمت إزالتهم</div>
-                        <div id="statProcessedFriends" class="text-2xl font-bold text-[#f23f43]">0</div>
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تم حذفها</div>
+                        <div id="dmStatDeleted" class="text-2xl font-bold text-[#5865F2]">0</div>
                     </div>
                 </div>
-
+                <div class="w-full bg-[#2b2d31] rounded-full h-3 overflow-hidden border border-[#3f4147]/30">
+                    <div id="dmProgressBar" class="progress-bar h-full rounded-full" style="width:0%"></div>
+                </div>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between text-xs text-[#b5bac1] font-mono px-1">
-                        <span>لوق الحذف</span>
-                        <span id="logTimestamp">--:--:--</span>
+                        <span>سجل العمليات</span>
+                        <span id="dmLogTime">--:--:--</span>
                     </div>
-                    <div id="consoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
+                    <div id="dmConsoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
+                        <div class="text-[#949ba4]">جاهز للبدء...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="friendsCleanContainer" class="hidden fade-in space-y-6">
+            <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <img id="frUserAvatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#f23f43] object-cover">
+                    <div>
+                        <h3 id="frProfileUsername" class="text-base font-bold text-white"></h3>
+                        <p id="frProfileId" class="text-xs text-[#949ba4]" dir="ltr"></p>
+                    </div>
+                </div>
+                <button onclick="goBackToDashboard()" class="bg-[#2b2d31] hover:bg-[#35373c] text-white font-medium text-xs px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>رجوع</span>
+                </button>
+            </div>
+            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 rounded-2xl bg-[#f23f43]/15 flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-user-xmark text-[#f23f43] text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">إزالة كل الفرندات والقروبات</h3>
+                    <p class="text-xs text-[#949ba4]">سيتم حذف جميع الأصدقاء والخروج من كل السيرفرات</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#b5bac1] mb-2 flex items-center space-x-1.5 space-x-reverse">
+                        <i class="fa-solid fa-shield-halved text-[#23a55a]"></i>
+                        <span>أيديات الأصدقاء اللي ما تبي تحذفهم (افصل بفاصلة)</span>
+                    </label>
+                    <input type="text" id="frExcludeIds" placeholder="8278829598589,8327543598"
+                        class="w-full bg-[#1e1f22] text-white px-4 py-3 rounded-xl border border-transparent focus:border-[#f23f43] focus:outline-none transition text-sm text-left font-mono" dir="ltr">
+                </div>
+                <button onclick="startFriendsCleaning()" id="frStartBtn" class="w-full bg-[#f23f43] hover:bg-[#d8373b] text-white font-bold py-4 px-8 rounded-xl transition duration-200 shadow-lg shadow-[#f23f43]/30 flex items-center justify-center space-x-3 space-x-reverse text-base pulse-red">
+                    <i class="fa-solid fa-user-xmark text-lg"></i>
+                    <span>بدء عملية التنظيف</span>
+                </button>
+            </div>
+            <div id="frConsoleWrapper" class="hidden bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
+                <div class="flex items-center justify-between flex-wrap gap-4 border-b border-[#3f4147]/40 pb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2 space-x-reverse">
+                            <span id="frSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#f23f43]"></i></span>
+                            <span id="frStatusTitle">جاري التنظيف...</span>
+                        </h3>
+                        <p id="frStatusSub" class="text-xs text-[#949ba4]">لا تغلق الموقع حتى تنتهي العملية</p>
+                    </div>
+                    <button id="frBackBtn" onclick="goBackToDashboard()" class="hidden bg-[#2b2d31] hover:bg-[#35373c] text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition">الرجوع</button>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">الأصدقاء</div>
+                        <div id="frStatTotal" class="text-2xl font-bold text-white">0</div>
+                    </div>
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تم إزالتهم</div>
+                        <div id="frStatRemoved" class="text-2xl font-bold text-[#f23f43]">0</div>
+                    </div>
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">السيرفرات</div>
+                        <div id="frStatServers" class="text-2xl font-bold text-[#f0b232]">0</div>
+                    </div>
+                </div>
+                <div class="w-full bg-[#2b2d31] rounded-full h-3 overflow-hidden border border-[#3f4147]/30">
+                    <div id="frProgressBar" class="progress-bar h-full rounded-full" style="width:0%"></div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs text-[#b5bac1] font-mono px-1">
+                        <span>سجل العمليات</span>
+                        <span id="frLogTime">--:--:--</span>
+                    </div>
+                    <div id="frConsoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
+                        <div class="text-[#949ba4]">جاهز للبدء...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="serverCleanContainer" class="hidden fade-in space-y-6">
+            <div class="bg-[#313338] rounded-2xl p-5 border border-[#3f4147]/40 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <img id="svUserAvatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#23a55a] object-cover">
+                    <div>
+                        <h3 id="svProfileUsername" class="text-base font-bold text-white"></h3>
+                        <p id="svProfileId" class="text-xs text-[#949ba4]" dir="ltr"></p>
+                    </div>
+                </div>
+                <button onclick="goBackToDashboard()" class="bg-[#2b2d31] hover:bg-[#35373c] text-white font-medium text-xs px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>رجوع</span>
+                </button>
+            </div>
+            <div class="bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 rounded-2xl bg-[#23a55a]/15 flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-server text-[#23a55a] text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">حذف كلامك من كل السيرفرات</h3>
+                    <p class="text-xs text-[#949ba4]">سيتم حذف جميع رسائلك من كل السيرفرات فقط</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#b5bac1] mb-2 flex items-center space-x-1.5 space-x-reverse">
+                        <i class="fa-solid fa-shield-halved text-[#23a55a]"></i>
+                        <span>أيديات السيرفرات اللي ما تبي تحذف كلامك فيها (افصل بفاصلة)</span>
+                    </label>
+                    <input type="text" id="svExcludeIds" placeholder="123456789012345678,987654321098765432"
+                        class="w-full bg-[#1e1f22] text-white px-4 py-3 rounded-xl border border-transparent focus:border-[#23a55a] focus:outline-none transition text-sm text-left font-mono" dir="ltr">
+                </div>
+                <div class="bg-[#f23f43]/10 border border-[#f23f43]/30 rounded-xl p-4 text-center space-y-1">
+                    <div class="flex items-center justify-center space-x-2 space-x-reverse text-[#f23f43] font-bold text-sm">
+                        <i class="fa-solid fa-skull-crossbones"></i>
+                        <span>تحذير</span>
+                    </div>
+                    <p class="text-[#f23f43]/90 text-xs font-semibold">سيتم حذف كل كلامك من السيرفرات!</p>
+                </div>
+                <button onclick="startServerCleaning()" id="svStartBtn" class="w-full bg-[#23a55a] hover:bg-[#1a8f4a] text-white font-bold py-4 px-8 rounded-xl transition duration-200 shadow-lg shadow-[#23a55a]/25 flex items-center justify-center space-x-3 space-x-reverse text-base">
+                    <i class="fa-solid fa-server text-lg"></i>
+                    <span>حذف كلامك من السيرفرات</span>
+                </button>
+            </div>
+            <div id="svConsoleWrapper" class="hidden bg-[#313338] rounded-2xl p-6 md:p-8 border border-[#3f4147]/40 space-y-5">
+                <div class="flex items-center justify-between flex-wrap gap-4 border-b border-[#3f4147]/40 pb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2 space-x-reverse">
+                            <span id="svSpinner" class="inline-block animate-spin"><i class="fa-solid fa-circle-notch text-[#23a55a]"></i></span>
+                            <span id="svStatusTitle">جاري الحذف...</span>
+                        </h3>
+                        <p id="svStatusSub" class="text-xs text-[#949ba4]">لا تغلق الموقع حتى تنتهي العملية</p>
+                    </div>
+                    <button id="svBackBtn" onclick="goBackToDashboard()" class="hidden bg-[#2b2d31] hover:bg-[#35373c] text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#3f4147]/50 transition">الرجوع</button>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">إجمالي الرسائل</div>
+                        <div id="svStatTotal" class="text-2xl font-bold text-white">0</div>
+                    </div>
+                    <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
+                        <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تم حذفها</div>
+                        <div id="svStatDeleted" class="text-2xl font-bold text-[#23a55a]">0</div>
+                    </div>
+                </div>
+                <div class="w-full bg-[#2b2d31] rounded-full h-3 overflow-hidden border border-[#3f4147]/30">
+                    <div id="svProgressBar" class="progress-bar h-full rounded-full" style="width:0%"></div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs text-[#b5bac1] font-mono px-1">
+                        <span>سجل العمليات</span>
+                        <span id="svLogTime">--:--:--</span>
+                    </div>
+                    <div id="svConsoleLog" class="bg-[#111214] font-mono text-xs text-[#dbdee1] p-4 rounded-xl h-72 overflow-y-auto space-y-2 border border-[#2b2d31] shadow-inner text-right" dir="rtl">
                         <div class="text-[#949ba4]">جاهز للبدء...</div>
                     </div>
                 </div>
@@ -180,7 +413,6 @@
 
     </main>
 
-    <!-- نافذة منبثقة (Modal) -->
     <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#313338] border border-[#3f4147]/60 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 transform scale-95 transition-transform duration-300 text-right" id="modalCard">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -193,9 +425,7 @@
                 </div>
             </div>
             <div class="flex justify-end space-x-2 pt-2">
-                <button onclick="closeModal()" class="bg-[#5865F2] hover:bg-[#4752C4] text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition">
-                    حسناً
-                </button>
+                <button onclick="closeModal()" class="bg-[#5865F2] hover:bg-[#4752C4] text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition">حسناً</button>
             </div>
         </div>
     </div>
@@ -208,6 +438,15 @@
     <script>
         let authToken = "";
         let currentUser = null;
+        let isRunning = false;
+
+        const CORS_PROXIES = [
+            url => 'https://corsproxy.io/?' + encodeURIComponent(url),
+            url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+            url => 'https://corsproxy.org/?' + encodeURIComponent(url),
+        ];
+
+        let activeProxyIndex = 0;
 
         function toggleTokenVisibility() {
             const input = document.getElementById('tokenInput');
@@ -224,14 +463,10 @@
         function showModal(title, message, type = 'info') {
             const modal = document.getElementById('customModal');
             const card = document.getElementById('modalCard');
-            const titleEl = document.getElementById('modalTitle');
-            const msgEl = document.getElementById('modalMessage');
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
             const iconContainer = document.getElementById('modalIconContainer');
             const iconEl = document.getElementById('modalIcon');
-
-            titleEl.textContent = title;
-            msgEl.textContent = message;
-
             if (type === 'error') {
                 iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#f23f43]';
                 iconEl.className = 'fa-solid fa-triangle-exclamation';
@@ -242,12 +477,8 @@
                 iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#5865F2]';
                 iconEl.className = 'fa-solid fa-info';
             }
-
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                card.classList.remove('scale-95');
-            }, 10);
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
         }
 
         function closeModal() {
@@ -255,66 +486,129 @@
             const card = document.getElementById('modalCard');
             modal.classList.add('opacity-0');
             card.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
 
         async function discordFetch(endpoint, options = {}) {
             const targetUrl = 'https://discord.com/api/v9' + endpoint;
-            
             const headers = {
                 'Authorization': authToken,
                 'Content-Type': 'application/json',
                 ...(options.headers || {})
             };
 
-            const response = await fetch(targetUrl, {
+            const fetchOptions = {
                 method: options.method || 'GET',
                 headers: headers,
-                body: options.body ? JSON.stringify(options.body) : undefined
-            });
-            return response;
+            };
+            if (options.body) {
+                fetchOptions.body = JSON.stringify(options.body);
+            }
+
+            for (let i = 0; i < CORS_PROXIES.length; i++) {
+                const proxyIndex = (activeProxyIndex + i) % CORS_PROXIES.length;
+                const proxyUrl = CORS_PROXIES[proxyIndex](targetUrl);
+                try {
+                    const response = await fetch(proxyUrl, fetchOptions);
+                    if (response.ok || response.status === 204 || response.status === 429) {
+                        activeProxyIndex = proxyIndex;
+                        return response;
+                    }
+                    if (response.status === 401 || response.status === 403) {
+                        return response;
+                    }
+                    const text = await response.text();
+                    if (text && !text.startsWith('<')) {
+                        return new Response(text, { status: response.status, headers: response.headers });
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+
+            try {
+                const directResponse = await fetch(targetUrl, fetchOptions);
+                return directResponse;
+            } catch (e) {
+                throw new Error('فشل الاتصال بديسكورد. جرب تفتح الموقع بـ VPN أو جرب متصفح ثاني.');
+            }
+        }
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        function parseExcludeIds(inputId) {
+            const raw = document.getElementById(inputId).value.trim();
+            if (!raw) return [];
+            return raw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        }
+
+        function addLog(logId, timeId, message, type = 'info') {
+            const logBox = document.getElementById(logId);
+            const timeStr = new Date().toLocaleTimeString();
+            document.getElementById(timeId).textContent = timeStr;
+            const div = document.createElement('div');
+            if (type === 'error') div.className = 'text-[#f23f43]';
+            else if (type === 'success') div.className = 'text-[#23a55a] font-bold';
+            else if (type === 'warn') div.className = 'text-[#f0b232]';
+            else div.className = 'text-[#949ba4]';
+            div.textContent = `[${timeStr}] ${message}`;
+            logBox.appendChild(div);
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function addRichLog(logId, timeId, html) {
+            const logBox = document.getElementById(logId);
+            const timeStr = new Date().toLocaleTimeString();
+            document.getElementById(timeId).textContent = timeStr;
+            const div = document.createElement('div');
+            div.className = 'bg-[#1e1f22] p-2.5 rounded-lg border border-[#3f4147]/30 text-white space-y-1';
+            div.innerHTML = html;
+            logBox.appendChild(div);
+            logBox.scrollTop = logBox.scrollHeight;
         }
 
         async function loginToDiscord() {
             const tokenInput = document.getElementById('tokenInput').value.trim();
             if (!tokenInput) {
-                showModal('غلط', 'ياريت تكتب التوكن بشكل صحيح', 'error');
+                showModal('خطأ', 'اكتب التوكن بشكل صحيح', 'error');
                 return;
             }
-
             const loginBtn = document.getElementById('loginBtn');
             loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>بتحقق من التوكن اصبر</span>';
-
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>جاري التحقق...</span>';
             try {
                 authToken = tokenInput;
                 const response = await discordFetch('/users/@me');
-
                 if (!response.ok) {
-                    throw new Error('التوكن غير صالح أو منتهي الصلاحية، تأكد من توكن بدون رموز زيادة');
+                    if (response.status === 401) throw new Error('التوكن غير صالح أو منتهي الصلاحية');
+                    throw new Error('فشل التحقق (كود: ' + response.status + ')');
                 }
-
                 const data = await response.json();
+                if (!data || !data.id) throw new Error('الرد من ديسكورد غير صالح');
                 currentUser = data;
-
-                document.getElementById('profileUsername').textContent = data.username + (data.discriminator && data.discriminator !== '0' ? `#${data.discriminator}` : '');
-                document.getElementById('profileId').textContent = `ID: ${data.id}`;
-                
-                const avatarUrl = data.avatar 
-                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=160` 
+                const username = data.username + (data.discriminator && data.discriminator !== '0' ? `#${data.discriminator}` : '');
+                const avatarUrl = data.avatar
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=160`
                     : `https://cdn.discordapp.com/embed/avatars/${parseInt(data.discriminator || '0') % 5}.png`;
+                document.getElementById('profileUsername').textContent = username;
+                document.getElementById('profileId').textContent = `ID: ${data.id}`;
                 document.getElementById('userAvatar').src = avatarUrl;
-
+                document.getElementById('dmProfileUsername').textContent = username;
+                document.getElementById('dmProfileId').textContent = `ID: ${data.id}`;
+                document.getElementById('dmUserAvatar').src = avatarUrl;
+                document.getElementById('frProfileUsername').textContent = username;
+                document.getElementById('frProfileId').textContent = `ID: ${data.id}`;
+                document.getElementById('frUserAvatar').src = avatarUrl;
+                document.getElementById('svProfileUsername').textContent = username;
+                document.getElementById('svProfileId').textContent = `ID: ${data.id}`;
+                document.getElementById('svUserAvatar').src = avatarUrl;
                 document.getElementById('statusUsername').textContent = data.username;
                 document.getElementById('connectionStatus').classList.remove('hidden');
                 document.getElementById('connectionStatus').classList.add('flex');
-
                 document.getElementById('step1Container').classList.add('hidden');
                 document.getElementById('step2Container').classList.remove('hidden');
-
             } catch (err) {
+                authToken = "";
                 showModal('خطأ في التحقق', err.message, 'error');
             } finally {
                 loginBtn.disabled = false;
@@ -325,149 +619,374 @@
         function logout() {
             authToken = "";
             currentUser = null;
+            isRunning = false;
             document.getElementById('tokenInput').value = '';
             document.getElementById('connectionStatus').classList.remove('flex');
             document.getElementById('connectionStatus').classList.add('hidden');
+            hideAllFeaturePages();
             document.getElementById('step2Container').classList.add('hidden');
             document.getElementById('step1Container').classList.remove('hidden');
         }
 
-        function appendCustomLog(userId, username) {
-            const logBox = document.getElementById('consoleLog');
-            const timeStr = new Date().toLocaleTimeString();
-            document.getElementById('logTimestamp').textContent = timeStr;
-
-            const div = document.createElement('div');
-            div.className = 'bg-[#1e1f22] p-2.5 rounded-lg border border-[#3f4147]/30 text-white space-y-1';
-            div.innerHTML = `
-                <div class="text-[#f23f43] font-bold">إيدي الصديق: <span class="text-white select-all" dir="ltr">${userId}</span></div>
-                <div class="text-[#23a55a]">اسم المستخدم: <span class="text-white font-semibold">${username}</span> - تم إزالة الصداقة بنجاح.</div>
-            `;
-            logBox.appendChild(div);
-            logBox.scrollTop = logBox.scrollHeight;
+        function hideAllFeaturePages() {
+            ['dmCleanContainer','friendsCleanContainer','serverCleanContainer'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
         }
 
-        function appendSystemLog(message, type = 'info') {
-            const logBox = document.getElementById('consoleLog');
-            const timeStr = new Date().toLocaleTimeString();
-            const div = document.createElement('div');
-            div.className = type === 'error' ? 'text-[#f23f43]' : (type === 'success' ? 'text-[#23a55a] font-bold' : 'text-[#949ba4]');
-            div.textContent = `[${timeStr}] ${message}`;
-            logBox.appendChild(div);
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-        async function startCleaningProcess() {
+        function showFeaturePage(feature) {
+            hideAllFeaturePages();
             document.getElementById('step2Container').classList.add('hidden');
-            document.getElementById('step3Container').classList.remove('hidden');
-            document.getElementById('cancelBtn').classList.add('hidden');
-            document.getElementById('consoleSpinner').classList.remove('hidden');
-            document.getElementById('consoleStatusTitle').textContent = 'ببدء';
-            document.getElementById('consoleLog').innerHTML = '';
+            if (feature === 'dm') document.getElementById('dmCleanContainer').classList.remove('hidden');
+            if (feature === 'friends') document.getElementById('friendsCleanContainer').classList.remove('hidden');
+            if (feature === 'server') document.getElementById('serverCleanContainer').classList.remove('hidden');
+        }
 
-            let totalFriendsCount = 0;
-            let processedFriendsCount = 0;
+        function goBackToDashboard() {
+            if (isRunning) {
+                showModal('تنبيه', 'العملية لا تزال جارية، انتظر حتى تنتهي.', 'error');
+                return;
+            }
+            hideAllFeaturePages();
+            document.getElementById('step2Container').classList.remove('hidden');
+        }
 
-            document.getElementById('statTotalFriends').textContent = '0';
-            document.getElementById('statProcessedFriends').textContent = '0';
-
+        async function startDmCleaning() {
+            if (isRunning) return;
+            isRunning = true;
+            const excludeIds = parseExcludeIds('dmExcludeIds');
+            document.getElementById('dmConsoleWrapper').classList.remove('hidden');
+            document.getElementById('dmStartBtn').disabled = true;
+            document.getElementById('dmStartBtn').classList.add('opacity-50');
+            document.getElementById('dmBackBtn').classList.add('hidden');
+            document.getElementById('dmSpinner').classList.remove('hidden');
+            document.getElementById('dmStatusTitle').textContent = 'جاري حذف الرسائل...';
+            document.getElementById('dmStatusSub').textContent = 'لا تغلق الموقع';
+            document.getElementById('dmConsoleLog').innerHTML = '';
+            document.getElementById('dmStatTotal').textContent = '0';
+            document.getElementById('dmStatDeleted').textContent = '0';
+            document.getElementById('dmProgressBar').style.width = '0%';
+            let totalMessages = 0;
+            let deletedMessages = 0;
             try {
-                appendSystemLog("بشوف اصدقائك", "info");
-                const friendsRes = await discordFetch('/users/@me/relationships');
-
-                if (!friendsRes.ok) {
-                    throw new Error("فشل في جلب الأصدقاء، تحقق من صلاحية التوكن.");
-                }
-
-                const friendsData = await friendsRes.json();
-                const actualFriends = friendsData.filter(f => f.type === 1); 
-                totalFriendsCount = actualFriends.length;
-                document.getElementById('statTotalFriends').textContent = totalFriendsCount;
-
-                appendSystemLog(`تم العثور على ${totalFriendsCount} ببدء حذف...`, "success");
-
-                for (let friend of actualFriends) {
-                    const userId = friend.id;
-                    const username = friend.user && friend.user.username ? friend.user.username : 'Unknown';
-
-                    let delRes = await discordFetch(`/users/@me/relationships/${userId}`, {
-                        method: 'DELETE'
-                    });
-
-                    if (delRes.status === 204 || delRes.ok) {
-                        processedFriendsCount++;
-                        document.getElementById('statProcessedFriends').textContent = processedFriendsCount;
-                        appendCustomLog(userId, username);
-                    } else if (delRes.status === 429) {
-                        const errorJson = await delRes.json();
-                        const retryAfter = (errorJson.retry_after || 5) * 1000;
-                        appendSystemLog(`تم بلوغ الحد المسموح (Rate Limit)، الانتظار لمدة ${retryAfter / 1000} ثانية لتجنب الحظر...`, "error");
-                        await sleep(retryAfter);
-
-                        delRes = await discordFetch(`/users/@me/relationships/${userId}`, {
-                            method: 'DELETE'
-                        });
-                        processedFriendsCount++;
-                        document.getElementById('statProcessedFriends').textContent = processedFriendsCount;
-                        appendCustomLog(userId, username);
-                    } else {
-                        appendSystemLog(`تعذر حذف المستخدم: ${username} (${userId})`, "error");
-                    }
-
-                    await sleep(1000);
-                }
-
-                appendSystemLog("جاري تنظيف محادثات الخاص (Direct Messages)...", "info");
+                addLog('dmConsoleLog','dmLogTime','جاري جلب محادثات الخاص...','info');
                 const channelsRes = await discordFetch('/users/@me/channels');
-
-                if (channelsRes.ok) {
-                    const channels = await channelsRes.json();
-                    const updatedFriendsRes = await discordFetch('/users/@me/relationships');
-                    let currentFriendsIds = [];
-                    if (updatedFriendsRes.ok) {
-                        const updatedFriends = await updatedFriendsRes.json();
-                        currentFriendsIds = updatedFriends.filter(f => f.type === 1).map(f => f.id);
+                if (!channelsRes.ok) throw new Error('فشل في جلب المحادثات');
+                const channels = await channelsRes.json();
+                const dmChannels = channels.filter(c => c.type === 1);
+                addLog('dmConsoleLog','dmLogTime',`تم العثور على ${dmChannels.length} محادثة خاصة`,'success');
+                for (let i = 0; i < dmChannels.length; i++) {
+                    const channel = dmChannels[i];
+                    const recipient = channel.recipients && channel.recipients[0] ? channel.recipients[0] : null;
+                    const recipientId = recipient ? recipient.id : 'unknown';
+                    const recipientName = recipient ? recipient.username : 'Unknown';
+                    if (excludeIds.includes(recipientId)) {
+                        addLog('dmConsoleLog','dmLogTime',`تخطي خاص ${recipientName} (${recipientId}) - مستثنى`,'warn');
+                        continue;
                     }
-
-                    for (let channel of channels) {
-                        const recipients = channel.recipients || [];
-                        if (recipients.length > 0) {
-                            const recipientId = recipients[0].id;
-                            const channelId = channel.id;
-
-                            if (!currentFriendsIds.includes(recipientId)) {
-                                await discordFetch(`/channels/${channelId}`, {
-                                    method: 'DELETE'
-                                });
-                                await sleep(800); 
+                    addLog('dmConsoleLog','dmLogTime',`فحص خاص: ${recipientName} (${recipientId})`,'info');
+                    let cursor = null;
+                    let foundInChannel = 0;
+                    let hasMore = true;
+                    while (hasMore) {
+                        let url = `/channels/${channel.id}/messages?limit=100`;
+                        if (cursor) url += `&before=${cursor}`;
+                        const msgRes = await discordFetch(url);
+                        if (!msgRes.ok) {
+                            if (msgRes.status === 403) {
+                                addLog('dmConsoleLog','dmLogTime',`لا يمكن الوصول لخاص ${recipientName} - تخطي`,'warn');
+                                break;
                             }
+                            break;
                         }
+                        const messages = await msgRes.json();
+                        if (messages.length === 0) break;
+                        const myMessages = messages.filter(m => m.author.id === currentUser.id);
+                        for (const msg of myMessages) {
+                            totalMessages++;
+                            document.getElementById('dmStatTotal').textContent = totalMessages;
+                            const delRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
+                            if (delRes.status === 204 || delRes.ok) {
+                                deletedMessages++;
+                                document.getElementById('dmStatDeleted').textContent = deletedMessages;
+                                foundInChannel++;
+                            } else if (delRes.status === 429) {
+                                const errJson = await delRes.json();
+                                const retryAfter = (errJson.retry_after || 5) * 1000;
+                                addLog('dmConsoleLog','dmLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
+                                await sleep(retryAfter);
+                                const retryRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
+                                if (retryRes.ok || retryRes.status === 204) {
+                                    deletedMessages++;
+                                    document.getElementById('dmStatDeleted').textContent = deletedMessages;
+                                    foundInChannel++;
+                                }
+                            }
+                            await sleep(1500);
+                        }
+                        if (totalMessages > 0) {
+                            const pct = Math.min(100, Math.round((deletedMessages / totalMessages) * 100));
+                            document.getElementById('dmProgressBar').style.width = pct + '%';
+                        }
+                        cursor = messages[messages.length - 1].id;
+                        if (messages.length < 100) hasMore = false;
+                        await sleep(500);
+                    }
+                    if (foundInChannel > 0) {
+                        addRichLog('dmConsoleLog','dmLogTime',`
+                            <div class="text-[#5865F2] font-bold">خاص: ${recipientName}</div>
+                            <div class="text-[#23a55a]">تم حذف ${foundInChannel} رسالة</div>
+                        `);
                     }
                 }
-
-                document.getElementById('consoleSpinner').classList.add('hidden');
-                document.getElementById('consoleStatusTitle').textContent = 'تمت العملية بنجاح!';
-                document.getElementById('consoleStatusSub').textContent = 'تم تنظيف الأصدقاء والخاص بنجاح.';
-                document.getElementById('cancelBtn').classList.remove('hidden');
-                
-                appendSystemLog("تم تم", "success");
-                showModal('تم بنجاح', 'تم إزالة الأصدقاء وتنظيف الخاص بنجاح تام.', 'success');
-
+                document.getElementById('dmProgressBar').style.width = '100%';
+                document.getElementById('dmSpinner').classList.add('hidden');
+                document.getElementById('dmStatusTitle').textContent = 'تمت العملية بنجاح!';
+                document.getElementById('dmStatusSub').textContent = `تم حذف ${deletedMessages} رسالة من الخاص`;
+                document.getElementById('dmBackBtn').classList.remove('hidden');
+                addLog('dmConsoleLog','dmLogTime',`تم بنجاح! حذف ${deletedMessages} رسالة`,'success');
+                showModal('تم بنجاح', `تم حذف ${deletedMessages} رسالة من الخاص`, 'success');
             } catch (err) {
-                document.getElementById('consoleSpinner').classList.add('hidden');
-                document.getElementById('consoleStatusTitle').textContent = 'صار في غلط';
-                document.getElementById('consoleStatusSub').textContent = err.message;
-                document.getElementById('cancelBtn').classList.remove('hidden');
-                appendSystemLog(`خطأ: ${err.message}`, "error");
+                document.getElementById('dmSpinner').classList.add('hidden');
+                document.getElementById('dmStatusTitle').textContent = 'حدث خطأ';
+                document.getElementById('dmStatusSub').textContent = err.message;
+                document.getElementById('dmBackBtn').classList.remove('hidden');
+                addLog('dmConsoleLog','dmLogTime',`خطأ: ${err.message}`,'error');
                 showModal('خطأ', err.message, 'error');
+            } finally {
+                isRunning = false;
+                document.getElementById('dmStartBtn').disabled = false;
+                document.getElementById('dmStartBtn').classList.remove('opacity-50');
             }
         }
 
-        function resetToDashboard() {
-            document.getElementById('step3Container').classList.add('hidden');
-            document.getElementById('step2Container').classList.remove('hidden');
+        async function startFriendsCleaning() {
+            if (isRunning) return;
+            isRunning = true;
+            const excludeIds = parseExcludeIds('frExcludeIds');
+            document.getElementById('frConsoleWrapper').classList.remove('hidden');
+            document.getElementById('frStartBtn').disabled = true;
+            document.getElementById('frStartBtn').classList.add('opacity-50');
+            document.getElementById('frBackBtn').classList.add('hidden');
+            document.getElementById('frSpinner').classList.remove('hidden');
+            document.getElementById('frStatusTitle').textContent = 'جاري التنظيف...';
+            document.getElementById('frStatusSub').textContent = 'لا تغلق الموقع';
+            document.getElementById('frConsoleLog').innerHTML = '';
+            document.getElementById('frStatTotal').textContent = '0';
+            document.getElementById('frStatRemoved').textContent = '0';
+            document.getElementById('frStatServers').textContent = '0';
+            document.getElementById('frProgressBar').style.width = '0%';
+            let totalFriends = 0;
+            let removedFriends = 0;
+            let leftServers = 0;
+            try {
+                addLog('frConsoleLog','frLogTime','جاري جلب الأصدقاء...','info');
+                const friendsRes = await discordFetch('/users/@me/relationships');
+                if (!friendsRes.ok) throw new Error('فشل في جلب الأصدقاء');
+                const friendsData = await friendsRes.json();
+                const actualFriends = friendsData.filter(f => f.type === 1);
+                totalFriends = actualFriends.length;
+                document.getElementById('frStatTotal').textContent = totalFriends;
+                addLog('frConsoleLog','frLogTime',`تم العثور على ${totalFriends} صديق`,'success');
+                for (let i = 0; i < actualFriends.length; i++) {
+                    const friend = actualFriends[i];
+                    const userId = friend.id;
+                    const username = friend.user && friend.user.username ? friend.user.username : 'Unknown';
+                    if (excludeIds.includes(userId)) {
+                        addLog('frConsoleLog','frLogTime',`تخطي ${username} (${userId}) - مستثنى`,'warn');
+                        continue;
+                    }
+                    let delRes = await discordFetch(`/users/@me/relationships/${userId}`, { method: 'DELETE' });
+                    if (delRes.status === 204 || delRes.ok) {
+                        removedFriends++;
+                        document.getElementById('frStatRemoved').textContent = removedFriends;
+                        addRichLog('frConsoleLog','frLogTime',`
+                            <div class="text-[#f23f43] font-bold">ID: <span class="text-white" dir="ltr">${userId}</span></div>
+                            <div class="text-[#23a55a]">${username} - تم إزالة الصداقة</div>
+                        `);
+                    } else if (delRes.status === 429) {
+                        const errJson = await delRes.json();
+                        const retryAfter = (errJson.retry_after || 5) * 1000;
+                        addLog('frConsoleLog','frLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
+                        await sleep(retryAfter);
+                        delRes = await discordFetch(`/users/@me/relationships/${userId}`, { method: 'DELETE' });
+                        if (delRes.ok || delRes.status === 204) {
+                            removedFriends++;
+                            document.getElementById('frStatRemoved').textContent = removedFriends;
+                        }
+                    } else {
+                        addLog('frConsoleLog','frLogTime',`تعذر حذف ${username} (${userId})`,'error');
+                    }
+                    const progress = Math.round(((removedFriends) / totalFriends) * 50);
+                    document.getElementById('frProgressBar').style.width = progress + '%';
+                    await sleep(1000);
+                }
+                addLog('frConsoleLog','frLogTime','جاري جلب السيرفرات...','info');
+                const guildsRes = await discordFetch('/users/@me/guilds');
+                if (guildsRes.ok) {
+                    const guilds = await guildsRes.json();
+                    addLog('frConsoleLog','frLogTime',`تم العثور على ${guilds.length} سيرفر`,'success');
+                    for (let i = 0; i < guilds.length; i++) {
+                        const guild = guilds[i];
+                        const guildId = guild.id;
+                        const guildName = guild.name;
+                        if (guild.owner) {
+                            addLog('frConsoleLog','frLogTime',`تخطي ${guildName} - أنت المالك`,'warn');
+                            continue;
+                        }
+                        const leaveRes = await discordFetch(`/users/@me/guilds/${guildId}`, { method: 'DELETE' });
+                        if (leaveRes.ok || leaveRes.status === 204) {
+                            leftServers++;
+                            document.getElementById('frStatServers').textContent = leftServers;
+                            addRichLog('frConsoleLog','frLogTime',`
+                                <div class="text-[#f0b232] font-bold">سيرفر: ${guildName}</div>
+                                <div class="text-[#23a55a]">تم الخروج بنجاح</div>
+                            `);
+                        } else if (leaveRes.status === 429) {
+                            const errJson = await leaveRes.json();
+                            const retryAfter = (errJson.retry_after || 5) * 1000;
+                            addLog('frConsoleLog','frLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
+                            await sleep(retryAfter);
+                            const retryRes = await discordFetch(`/users/@me/guilds/${guildId}`, { method: 'DELETE' });
+                            if (retryRes.ok || retryRes.status === 204) {
+                                leftServers++;
+                                document.getElementById('frStatServers').textContent = leftServers;
+                            }
+                        }
+                        const progress = 50 + Math.round(((leftServers) / guilds.length) * 50);
+                        document.getElementById('frProgressBar').style.width = progress + '%';
+                        await sleep(1000);
+                    }
+                }
+                document.getElementById('frProgressBar').style.width = '100%';
+                document.getElementById('frSpinner').classList.add('hidden');
+                document.getElementById('frStatusTitle').textContent = 'تمت العملية بنجاح!';
+                document.getElementById('frStatusSub').textContent = `تم إزالة ${removedFriends} صديق والخروج من ${leftServers} سيرفر`;
+                document.getElementById('frBackBtn').classList.remove('hidden');
+                addLog('frConsoleLog','frLogTime',`تم! ${removedFriends} صديق و ${leftServers} سيرفر`,'success');
+                showModal('تم بنجاح', `تم إزالة ${removedFriends} صديق والخروج من ${leftServers} سيرفر`, 'success');
+            } catch (err) {
+                document.getElementById('frSpinner').classList.add('hidden');
+                document.getElementById('frStatusTitle').textContent = 'حدث خطأ';
+                document.getElementById('frStatusSub').textContent = err.message;
+                document.getElementById('frBackBtn').classList.remove('hidden');
+                addLog('frConsoleLog','frLogTime',`خطأ: ${err.message}`,'error');
+                showModal('خطأ', err.message, 'error');
+            } finally {
+                isRunning = false;
+                document.getElementById('frStartBtn').disabled = false;
+                document.getElementById('frStartBtn').classList.remove('opacity-50');
+            }
+        }
+
+        async function startServerCleaning() {
+            if (isRunning) return;
+            isRunning = true;
+            const excludeIds = parseExcludeIds('svExcludeIds');
+            document.getElementById('svConsoleWrapper').classList.remove('hidden');
+            document.getElementById('svStartBtn').disabled = true;
+            document.getElementById('svStartBtn').classList.add('opacity-50');
+            document.getElementById('svBackBtn').classList.add('hidden');
+            document.getElementById('svSpinner').classList.remove('hidden');
+            document.getElementById('svStatusTitle').textContent = 'جاري حذف الرسائل من السيرفرات...';
+            document.getElementById('svStatusSub').textContent = 'لا تغلق الموقع';
+            document.getElementById('svConsoleLog').innerHTML = '';
+            document.getElementById('svStatTotal').textContent = '0';
+            document.getElementById('svStatDeleted').textContent = '0';
+            document.getElementById('svProgressBar').style.width = '0%';
+            let totalMessages = 0;
+            let deletedMessages = 0;
+            try {
+                addLog('svConsoleLog','svLogTime','جاري جلب السيرفرات...','info');
+                const guildsRes = await discordFetch('/users/@me/guilds');
+                if (!guildsRes.ok) throw new Error('فشل في جلب السيرفرات');
+                const guilds = await guildsRes.json();
+                addLog('svConsoleLog','svLogTime',`تم العثور على ${guilds.length} سيرفر`,'success');
+                for (const guild of guilds) {
+                    if (excludeIds.includes(guild.id)) {
+                        addLog('svConsoleLog','svLogTime',`تخطي سيرفر ${guild.name} (${guild.id}) - مستثنى`,'warn');
+                        continue;
+                    }
+                    addLog('svConsoleLog','svLogTime',`فحص سيرفر: ${guild.name}`,'info');
+                    const channelsRes = await discordFetch(`/guilds/${guild.id}/channels`);
+                    if (!channelsRes.ok) {
+                        addLog('svConsoleLog','svLogTime',`لا يمكن الوصول لقنوات ${guild.name} - تخطي`,'warn');
+                        continue;
+                    }
+                    const channels = await channelsRes.json();
+                    const textChannels = channels.filter(c => c.type === 0);
+                    for (const channel of textChannels) {
+                        let cursor = null;
+                        let hasMore = true;
+                        let foundInChannel = 0;
+                        while (hasMore) {
+                            let url = `/channels/${channel.id}/messages?limit=100`;
+                            if (cursor) url += `&before=${cursor}`;
+                            const msgRes = await discordFetch(url);
+                            if (!msgRes.ok) {
+                                if (msgRes.status === 403) break;
+                                break;
+                            }
+                            const messages = await msgRes.json();
+                            if (messages.length === 0) break;
+                            const myMessages = messages.filter(m => m.author.id === currentUser.id);
+                            for (const msg of myMessages) {
+                                totalMessages++;
+                                document.getElementById('svStatTotal').textContent = totalMessages;
+                                const delRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
+                                if (delRes.status === 204 || delRes.ok) {
+                                    deletedMessages++;
+                                    document.getElementById('svStatDeleted').textContent = deletedMessages;
+                                    foundInChannel++;
+                                } else if (delRes.status === 429) {
+                                    const errJson = await delRes.json();
+                                    const retryAfter = (errJson.retry_after || 5) * 1000;
+                                    addLog('svConsoleLog','svLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
+                                    await sleep(retryAfter);
+                                    const retryRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
+                                    if (retryRes.ok || retryRes.status === 204) {
+                                        deletedMessages++;
+                                        document.getElementById('svStatDeleted').textContent = deletedMessages;
+                                        foundInChannel++;
+                                    }
+                                }
+                                await sleep(1500);
+                            }
+                            if (totalMessages > 0) {
+                                const pct = Math.min(100, Math.round((deletedMessages / totalMessages) * 100));
+                                document.getElementById('svProgressBar').style.width = pct + '%';
+                            }
+                            cursor = messages[messages.length - 1].id;
+                            if (messages.length < 100) hasMore = false;
+                            await sleep(500);
+                        }
+                        if (foundInChannel > 0) {
+                            addRichLog('svConsoleLog','svLogTime',`
+                                <div class="text-[#23a55a] font-bold">${guild.name} / #${channel.name}</div>
+                                <div class="text-[#b5bac1]">تم حذف ${foundInChannel} رسالة</div>
+                            `);
+                        }
+                    }
+                }
+                document.getElementById('svProgressBar').style.width = '100%';
+                document.getElementById('svSpinner').classList.add('hidden');
+                document.getElementById('svStatusTitle').textContent = 'تمت العملية بنجاح!';
+                document.getElementById('svStatusSub').textContent = `تم حذف ${deletedMessages} رسالة من السيرفرات`;
+                document.getElementById('svBackBtn').classList.remove('hidden');
+                addLog('svConsoleLog','svLogTime',`تم! حذف ${deletedMessages} رسالة`,'success');
+                showModal('تم بنجاح', `تم حذف ${deletedMessages} رسالة من السيرفرات`, 'success');
+            } catch (err) {
+                document.getElementById('svSpinner').classList.add('hidden');
+                document.getElementById('svStatusTitle').textContent = 'حدث خطأ';
+                document.getElementById('svStatusSub').textContent = err.message;
+                document.getElementById('svBackBtn').classList.remove('hidden');
+                addLog('svConsoleLog','svLogTime',`خطأ: ${err.message}`,'error');
+                showModal('خطأ', err.message, 'error');
+            } finally {
+                isRunning = false;
+                document.getElementById('svStartBtn').disabled = false;
+                document.getElementById('svStartBtn').classList.remove('opacity-50');
+            }
         }
     </script>
 </body>
