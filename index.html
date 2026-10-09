@@ -440,13 +440,14 @@
         let currentUser = null;
         let isRunning = false;
 
-        const CORS_PROXIES = [
-            url => 'https://corsproxy.io/?' + encodeURIComponent(url),
-            url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-            url => 'https://corsproxy.org/?' + encodeURIComponent(url),
+        const PROXY_LIST = [
+            'https://corsproxy.io/?',
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.org/?',
+            'https://api.codetabs.com/v1/proxy?quest='
         ];
 
-        let activeProxyIndex = 0;
+        let workingProxy = null;
 
         function toggleTokenVisibility() {
             const input = document.getElementById('tokenInput');
@@ -489,6 +490,26 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
 
+        function buildProxyUrl(proxyBase, targetUrl) {
+            if (proxyBase.includes('allorigins') || proxyBase.includes('codetabs')) {
+                return proxyBase + encodeURIComponent(targetUrl);
+            }
+            return proxyBase + encodeURIComponent(targetUrl);
+        }
+
+        function isDiscordJson(text) {
+            if (!text || text.length === 0) return false;
+            if (text.trim().startsWith('<')) return false;
+            if (text.trim().startsWith('<!DOCTYPE')) return false;
+            try {
+                const parsed = JSON.parse(text);
+                if (parsed && typeof parsed === 'object') return true;
+                return false;
+            } catch {
+                return false;
+            }
+        }
+
         async function discordFetch(endpoint, options = {}) {
             const targetUrl = 'https://discord.com/api/v9' + endpoint;
             const headers = {
@@ -496,7 +517,6 @@
                 'Content-Type': 'application/json',
                 ...(options.headers || {})
             };
-
             const fetchOptions = {
                 method: options.method || 'GET',
                 headers: headers,
@@ -505,33 +525,50 @@
                 fetchOptions.body = JSON.stringify(options.body);
             }
 
-            for (let i = 0; i < CORS_PROXIES.length; i++) {
-                const proxyIndex = (activeProxyIndex + i) % CORS_PROXIES.length;
-                const proxyUrl = CORS_PROXIES[proxyIndex](targetUrl);
+            let proxiesToTry = [];
+            if (workingProxy !== null) {
+                proxiesToTry = [workingProxy];
+            }
+            for (const p of PROXY_LIST) {
+                if (!proxiesToTry.includes(p)) proxiesToTry.push(p);
+            }
+
+            for (const proxyBase of proxiesToTry) {
+                const proxyUrl = buildProxyUrl(proxyBase, targetUrl);
                 try {
                     const response = await fetch(proxyUrl, fetchOptions);
-                    if (response.ok || response.status === 204 || response.status === 429) {
-                        activeProxyIndex = proxyIndex;
-                        return response;
-                    }
-                    if (response.status === 401 || response.status === 403) {
-                        return response;
-                    }
                     const text = await response.text();
-                    if (text && !text.startsWith('<')) {
-                        return new Response(text, { status: response.status, headers: response.headers });
+
+                    if (isDiscordJson(text)) {
+                        let realStatus = response.status;
+                        try {
+                            const parsed = JSON.parse(text);
+                            if (parsed.code !== undefined && parsed.message !== undefined) {
+                                if (parsed.code === 0) realStatus = 200;
+                                else if (parsed.code === 10001 || parsed.code === 50001) realStatus = 401;
+                                else if (parsed.code === 50013) realStatus = 403;
+                                else if (parsed.retry_after !== undefined) realStatus = 429;
+                            }
+                        } catch {}
+
+                        workingProxy = proxyBase;
+                        return new Response(text, {
+                            status: realStatus,
+                            headers: { 'Content-Type': 'application/json' }
+                        });
                     }
+
+                    if (response.status === 204 || (response.ok && text === '')) {
+                        workingProxy = proxyBase;
+                        return new Response(null, { status: 204 });
+                    }
+
                 } catch (e) {
                     continue;
                 }
             }
 
-            try {
-                const directResponse = await fetch(targetUrl, fetchOptions);
-                return directResponse;
-            } catch (e) {
-                throw new Error('فشل الاتصال بديسكورد. جرب تفتح الموقع بـ VPN أو جرب متصفح ثاني.');
-            }
+            throw new Error('فشل الاتصال. جرب: 1) افتح بـ VPN  2) جرب متصفح ثاني  3) شغل الموقع محلياً');
         }
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -579,10 +616,17 @@
             try {
                 authToken = tokenInput;
                 const response = await discordFetch('/users/@me');
+
+                if (response.status === 401) throw new Error('التوكن غير صالح أو منتهي الصلاحية');
                 if (!response.ok) {
-                    if (response.status === 401) throw new Error('التوكن غير صالح أو منتهي الصلاحية');
-                    throw new Error('فشل التحقق (كود: ' + response.status + ')');
+                    let errMsg = 'فشل التحقق';
+                    try {
+                        const errData = await response.json();
+                        if (errData.message) errMsg = errData.message;
+                    } catch {}
+                    throw new Error(errMsg);
                 }
+
                 const data = await response.json();
                 if (!data || !data.id) throw new Error('الرد من ديسكورد غير صالح');
                 currentUser = data;
@@ -711,8 +755,8 @@
                                 document.getElementById('dmStatDeleted').textContent = deletedMessages;
                                 foundInChannel++;
                             } else if (delRes.status === 429) {
-                                const errJson = await delRes.json();
-                                const retryAfter = (errJson.retry_after || 5) * 1000;
+                                let retryAfter = 5000;
+                                try { const ej = await delRes.json(); retryAfter = (ej.retry_after || 5) * 1000; } catch {}
                                 addLog('dmConsoleLog','dmLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
                                 await sleep(retryAfter);
                                 const retryRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
@@ -805,8 +849,8 @@
                             <div class="text-[#23a55a]">${username} - تم إزالة الصداقة</div>
                         `);
                     } else if (delRes.status === 429) {
-                        const errJson = await delRes.json();
-                        const retryAfter = (errJson.retry_after || 5) * 1000;
+                        let retryAfter = 5000;
+                        try { const ej = await delRes.json(); retryAfter = (ej.retry_after || 5) * 1000; } catch {}
                         addLog('frConsoleLog','frLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
                         await sleep(retryAfter);
                         delRes = await discordFetch(`/users/@me/relationships/${userId}`, { method: 'DELETE' });
@@ -843,8 +887,8 @@
                                 <div class="text-[#23a55a]">تم الخروج بنجاح</div>
                             `);
                         } else if (leaveRes.status === 429) {
-                            const errJson = await leaveRes.json();
-                            const retryAfter = (errJson.retry_after || 5) * 1000;
+                            let retryAfter = 5000;
+                            try { const ej = await leaveRes.json(); retryAfter = (ej.retry_after || 5) * 1000; } catch {}
                             addLog('frConsoleLog','frLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
                             await sleep(retryAfter);
                             const retryRes = await discordFetch(`/users/@me/guilds/${guildId}`, { method: 'DELETE' });
@@ -939,8 +983,8 @@
                                     document.getElementById('svStatDeleted').textContent = deletedMessages;
                                     foundInChannel++;
                                 } else if (delRes.status === 429) {
-                                    const errJson = await delRes.json();
-                                    const retryAfter = (errJson.retry_after || 5) * 1000;
+                                    let retryAfter = 5000;
+                                    try { const ej = await delRes.json(); retryAfter = (ej.retry_after || 5) * 1000; } catch {}
                                     addLog('svConsoleLog','svLogTime',`Rate limit - انتظار ${retryAfter/1000}s`,'error');
                                     await sleep(retryAfter);
                                     const retryRes = await discordFetch(`/channels/${channel.id}/messages/${msg.id}`, { method: 'DELETE' });
