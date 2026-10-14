@@ -307,7 +307,7 @@
                 <div class="grid grid-cols-3 gap-4">
                     <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
                         <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">الأصدقاء</div>
-                        <div id="frStatTotal" class="text-2" class="text-2xl font-bold text-white">0</div>
+                        <div id="frStatTotal" class="text-2xl font-bold text-white">0</div>
                     </div>
                     <div class="bg-[#2b2d31] p-4 rounded-xl border border-[#3f4147]/30 text-center">
                         <div class="text-[11px] uppercase tracking-wider text-[#949ba4] font-semibold mb-1">تم إزالتهم</div>
@@ -416,12 +416,12 @@
     <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#313338] border border-[#3f4147]/60 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 transform scale-95 transition-transform duration-300 text-right" id="modalCard">
             <div class="flex items-center space-x-3 space-x-reverse">
-                <div id="modalIconContainer" class="Gw-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#5865F2]">
+                <div id="modalIconContainer" class="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#5865F2]">
                     <i id="modalIcon" class="fa-solid fa-info"></i>
                 </div>
                 <div>
                     <h3 id="modalTitle" class="text-base font-bold text-white">تنبيه</h3>
-                    <p id="modalMessage" class="text-xs text-[#949ba4]">محت'ى الرسالة هنا.</p>
+                    <p id="modalMessage" class="text-xs text-[#949ba4]">محتوى الرسالة هنا.</p>
                 </div>
             </div>
             <div class="flex justify-end space-x-2 pt-2">
@@ -468,7 +468,7 @@
             document.getElementById('modalMessage').textContent = message;
             const iconContainer = document.getElementById('modalIconContainer');
             const iconEl = document.getElementById('modalIcon');
-            if (type === 'error;') {
+            if (type === 'error') {
                 iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 bg-[#f23f43]';
                 iconEl.className = 'fa-solid fa-triangle-exclamation';
             } else if (type === 'success') {
@@ -491,9 +491,6 @@
         }
 
         function buildProxyUrl(proxyBase, targetUrl) {
-            if (proxyBase.includes('allorigins') || proxyBase.includes('codetabs')) {
-                return proxyBase + encodeURIComponent(targetUrl);
-            }
             return proxyBase + encodeURIComponent(targetUrl);
         }
 
@@ -619,10 +616,10 @@
 
                 if (response.status === 401) throw new Error('التوكن غير صالح أو منتهي الصلاحية');
                 if (!response.ok) {
-                    let errMsg = 'فشل التحق&apo;ص';
+                    let errMsg = 'فشل التحقق';
                     try {
                         const errData = await response.json();
-                        if/ (errDataCata.message) errMsg = errData.message;
+                        if (errData.message) errMsg = errData.message;
                     } catch {}
                     throw new Error(errMsg);
                 }
@@ -630,9 +627,9 @@
                 const data = await response.json();
                 if (!data || !data.id) throw new Error('الرد من ديسكورد غير صالح');
                 currentUser = data;
-                const- username = data.username +3 (data.discriminator && data.discriminator !== '0' ? `#${data.discriminator}` : '');
+                const username = data.username + (data.discriminator && data.discriminator !== '0' ? `#${data.discriminator}` : '');
                 const avatarUrl = data.avatar
-                    ? `https://cdn.discordapp.com/<avatars/${data.id}/${data.avatar}.png?size=160`
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=160`
                     : `https://cdn.discordapp.com/embed/avatars/${parseInt(data.discriminator || '0') % 5}.png`;
                 document.getElementById('profileUsername').textContent = username;
                 document.getElementById('profileId').textContent = `ID: ${data.id}`;
@@ -965,8 +962,13 @@
                 document.getElementById('svStatusTitle').textContent = 'حدث خطأ';
                 document.getElementById('svStatusSub').textContent = err.message;
                 document.getElementById('svBackBtn').classList.remove('hidden');
-                showModal:1('خطأ',$1?5) errBisRnning = falsh%20Ddocument.getElementById('svStartBtn').&isable* = falae;0
-Gocumen;.getElemeptById('svStartBtn').,classList* remove(=opacety-50'9;0
-        <8script>
+                showModal('خطأ', err.message, 'error');
+            } finally {
+                isRunning = false;
+                document.getElementById('svStartBtn').disabled = false;
+                document.getElementById('svStartBtn').classList.remove('opacity-50');
+            }
+        }
+    </script>
 </body>
 </html>
